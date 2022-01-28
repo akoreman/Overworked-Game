@@ -61,6 +61,8 @@ public class PlayerHandler : MonoBehaviour
         acceleration.x = Input.GetAxis("Horizontal");
         acceleration.y = Input.GetAxis("Vertical");
 
+        
+
         // Normalize the input vector to make controls more uniform and scale accordingly.
         acceleration.Normalize();
         acceleration *= accScaling;
@@ -78,14 +80,7 @@ public class PlayerHandler : MonoBehaviour
         if (PickedUpObject != null)
         {
             PickedUpObject.transform.position = player.position;
-
-            currentAngle = PickedUpObject.transform.localEulerAngles;
-
-            currentAngle.y = Mathf.MoveTowardsAngle(currentAngle.y, Angle, rotateSpeed * Time.deltaTime);
-            currentAngle.z = 0;
-            currentAngle.x = 0;
-
-            PickedUpObject.transform.localEulerAngles = currentAngle;
+            PickedUpObject.transform.localEulerAngles = new Vector3(0f,currentAngle.y,0f);
         }
 
         // Set that the player wants to jump, jump itself is handled in FixedUpdate(). 
