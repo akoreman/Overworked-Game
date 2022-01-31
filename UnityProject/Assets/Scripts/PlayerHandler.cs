@@ -199,8 +199,11 @@ public class PlayerHandler : MonoBehaviour
 
         PickedUpObject.objectTransform.GetChild(0).localPosition = new Vector3(0f, 0f, 0f);
         PickedUpObject.objectTransform.GetChild(1).localPosition = new Vector3(0f, 0f, 0f);
+        PickedUpObject.objectTransform.GetChild(2).localPosition = new Vector3(0f, 0f, 0f);
+
 
         PickedUpObject.objectTransform.GetChild(1).gameObject.SetActive(false);
+
 
         PickedUpObject = null;
     }
@@ -209,8 +212,11 @@ public class PlayerHandler : MonoBehaviour
     {
         var nearestObject = gameState.GetComponent<ObjectHandler>().NearestObjectWithinGrabRadius(pickupRadius, player.transform.position);
 
+        
         if (nearestObject != null)
         {
+            print(nearestObject.item.name);
+
             PickedUpObject = nearestObject;
 
             PickedUpObject.item.GetComponent<Rigidbody>().freezeRotation = true;
@@ -219,6 +225,8 @@ public class PlayerHandler : MonoBehaviour
 
             PickedUpObject.objectTransform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
             PickedUpObject.objectTransform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
+            PickedUpObject.objectTransform.GetChild(2).localPosition = new Vector3(1.5f, 0.5f, 0f);
+
 
             PickedUpObject.objectTransform.GetChild(0).localEulerAngles = new Vector3(0f, 0f, 0f);
         }
@@ -251,12 +259,12 @@ public class PlayerHandler : MonoBehaviour
     {
         print("yay");
 
-        var nearestMachine = gameState.GetComponent<MachineHandler>().MachinesWithinGrabRadius(interactionRadius, player.transform.position);
+        var nearestMachines = gameState.GetComponent<MachineHandler>().MachinesWithinGrabRadius(interactionRadius, player.transform.position);
 
         
-        if (nearestMachine != null)
+        if (nearestMachines != null)
         {
-            foreach (Machine x in nearestMachine)
+            foreach (Machine x in nearestMachines)
             {
                 if (PickedUpObject.interactionType == x.interactionType)
                 {
@@ -274,6 +282,23 @@ public class PlayerHandler : MonoBehaviour
 
                     break;
                 }    
+
+                if (PickedUpObject.interactionType == (x.interactionType + "-collect"))
+                {
+                    PickedUpObject.item.GetComponent<Rigidbody>().freezeRotation = true;
+                    PickedUpObject.item.GetComponent<Rigidbody>().useGravity = false;
+                    PickedUpObject.item.GetComponent<Collider>().enabled = false;
+                    PickedUpObject.item.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
+
+                    x.PlaceObject(PickedUpObject);
+
+                    print(PickedUpObject.objectTransform.position);
+
+                    PickedUpObject = null;
+                    print("yay2");
+
+                    break;
+                }
             }
         }
     }

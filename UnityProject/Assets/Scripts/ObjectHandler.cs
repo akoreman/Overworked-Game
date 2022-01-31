@@ -11,12 +11,11 @@ public class ObjectHandler : MonoBehaviour
         objectList.Add(new movableObject(Object, interactionType) );
     }
 
-    
-
     public movableObject NearestObjectWithinGrabRadius(float grabRadius, Vector3 Position)
     {
         float Distance = 0;
         float minDistance = 100000;
+        bool objectPresent = false;
 
         movableObject nearestObject = null;
 
@@ -32,14 +31,14 @@ public class ObjectHandler : MonoBehaviour
         }
 
         if (minDistance < grabRadius)
-            return nearestObject;
+            return nearestObject;  
         else
             return null;
     }
 
 }
 
-public class movableObject
+public class movableObject  //: MonoBehaviour
 {
     public Transform objectTransform;
     public Transform Hands;
@@ -48,12 +47,19 @@ public class movableObject
     public string interactionType;
     public bool freeToGrab;
 
+    public bool taskCompleted;
+
     public movableObject(GameObject Object, string interactionType)
     {
-        item = Object;
-        objectTransform = item.transform;
-        Hands = item.transform.GetChild(1);
+        this.item = Object;
+        this.objectTransform = item.transform;
+        this.Hands = item.transform.GetChild(1);
         this.interactionType = interactionType;
-        freeToGrab = true;
+        this.freeToGrab = true;
+    }
+
+    public void CompleteTask()
+    {
+        this.objectTransform.GetChild(2).gameObject.SetActive(true);
     }
 }

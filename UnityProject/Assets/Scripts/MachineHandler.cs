@@ -6,12 +6,21 @@ public class MachineHandler : MonoBehaviour
 {
     public List<Machine> machineList = new List<Machine>();
 
-    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime)
+    GameObject gameState;
+
+    void Awake()
     {
-        machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime));
+        gameState = GameObject.Find("Game State");
     }
 
-    
+    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime, Transform finishedObject)
+    {
+        //Machine machine = gameState.AddComponent<Machine>();
+        //machine = new Machine(Object, interactionType, placementPosition, interactionTime, this);
+        machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this, finishedObject)); 
+        //machineList.Add(machine);
+    }
+
     public List<Machine> MachinesWithinGrabRadius(float grabRadius, Vector3 Position)
     {
         float Distance = 0;
@@ -32,11 +41,32 @@ public class MachineHandler : MonoBehaviour
         else
             return null;
     }
+
+    public void StartRoutine(Machine machine, int waitTime, movableObject Object)
+    {
+        StartCoroutine(StartMachineCoroutine(machine, waitTime, Object));
+    }
+
+    IEnumerator StartMachineCoroutine(Machine machine, int waitTime, movableObject Object)
+    {
+        yield return new WaitForSecondsRealtime(waitTime);
+       
+        machine.interactionCompleted = true;
+        Object.freeToGrab = true;
+        Object.CompleteTask();
+
+  
+        print("Task Completed");
+    }
 }
 
-public class Machine : MonoBehaviour
+public class Machine //: MonoBehaviour
 {
+    MachineHandler machineHandler;
+
     public Transform objectTransform;
+
+    Transform finishedObject;
 
     public GameObject item;
 
@@ -48,25 +78,26 @@ public class Machine : MonoBehaviour
 
     Vector3 placementPosition;
 
-    public Machine(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime)
+    public Machine(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime, MachineHandler machineHandler, Transform finishedObject)
     {
         item = Object;
         objectTransform = item.transform;
         this.interactionType = interactionType;
         this.placementPosition = placementPosition;
         this.interactionTime = interactionTime;
-        interactionCompleted = false;
+        interactionCompleted = true;
         machineFilled = false;
+        this.machineHandler = machineHandler;
+        this.finishedObject = finishedObject;
+
     }
 
     public void PlaceObject(movableObject Object)
     {
-        print(this.objectTransform.position);
         Object.objectTransform.position = this.objectTransform.position + placementPosition;
-        //Object.objectTransform.localPosition = new Vector3(3f, 2f, 1f);
-        print(Object.objectTransform.position);
-        //Object.objectTransform.localPosition = placementPosition;
+
         Object.objectTransform.GetChild(0).localPosition = new Vector3(0f, 0f, 0f);
+        Object.objectTransform.GetChild(2).localPosition = new Vector3(0f, 0f, 0f);
         Object.Hands.gameObject.SetActive(false);
         Object.objectTransform.localEulerAngles = new Vector3(0f,0f,0f);
 
@@ -74,14 +105,9 @@ public class Machine : MonoBehaviour
         machineFilled = true;
         Object.freeToGrab = false;
 
-        StartCoroutine(StartMachineCoroutine( Object));
+        machineHandler.StartRoutine(this, interactionTime, Object);
     }
 
-    private IEnumerator StartMachineCoroutine(movableObject Object)
-    {
-        yield return new WaitForSeconds(interactionTime);
-        interactionCompleted = true;
-        Object.freeToGrab = true;
-    }
+
 
 }
