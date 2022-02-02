@@ -14,17 +14,14 @@ public class AddMachineToHandler : MonoBehaviour
     public string outputType;
     public int interactionTime;
 
-    public Transform outputTransform;
+    public Transform outputTransform = null;
     //public GameObject Object;
 
     void Awake()
     {
         gameState = GameObject.Find("Game State");
-
+       
         movableObject outputObject = new movableObject(outputTransform.gameObject, outputType);
-
- 
-        //Machine machine = new Machine(this.gameObject, interactionType, placementPosition, interactionTime, MachineHandler currentHandler)
 
         gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, outputObject);
     }

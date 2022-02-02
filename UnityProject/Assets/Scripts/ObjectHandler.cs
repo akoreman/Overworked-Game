@@ -27,13 +27,13 @@ public class ObjectHandler : MonoBehaviour
     {
         float Distance = 0;
         float minDistance = 100000;
-        bool objectPresent = false;
+        //bool objectPresent = false;
 
         movableObject nearestObject = null;
 
         foreach (movableObject x in objectList)
         {
-            Distance = (x.item.transform.position - Position).magnitude;
+            Distance = (x.gameObject.transform.position - Position).magnitude;
 
             if (Distance < minDistance && x.freeToGrab)
             {
@@ -50,33 +50,21 @@ public class ObjectHandler : MonoBehaviour
 
 }
 
-public class movableObject  //: MonoBehaviour
+public class movableObject 
 {
-    //ObjectHandler objectHandler;
+    public GameObject hands;
+    public GameObject gameObject;
 
-    public Transform objectTransform;
-    public Transform Hands;
-
-    public GameObject item;
     public string interactionType;
     public bool freeToGrab;
-
     public bool taskCompleted;
 
-    public movableObject(GameObject Object, string interactionType)//, ObjectHandler objectHandler)
+    public movableObject(GameObject gameObject, string interactionType)//, ObjectHandler objectHandler)
     {
-        this.item = Object;
-        this.objectTransform = item.transform;
-        this.Hands = item.transform.GetChild(1);
+        this.gameObject = gameObject;
+        this.hands = gameObject.transform.GetChild(1).gameObject;
         this.interactionType = interactionType;
         this.freeToGrab = true;
+    }
 
-        //this.objectHandler = objectHandler;
-    }
-    /*
-    public void CompleteTask()
-    {
-        this.objectTransform.GetChild(2).gameObject.SetActive(true);
-    }
-    */
 }
