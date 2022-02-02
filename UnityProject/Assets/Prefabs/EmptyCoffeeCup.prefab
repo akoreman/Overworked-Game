@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 216933198426043229}
   - component: {fileID: 8551102674220979142}
   m_Layer: 0
-  m_Name: Pickup Cup
+  m_Name: EmptyCoffeeCup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

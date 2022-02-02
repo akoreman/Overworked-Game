@@ -8,8 +8,20 @@ public class ObjectHandler : MonoBehaviour
 
     public void RegisterObject(GameObject Object, string interactionType)
     {
-        objectList.Add(new movableObject(Object, interactionType) );
+        objectList.Add(new movableObject(Object, interactionType));//, this) );
     }
+
+    public void RegisterObject(movableObject inputObject)
+    {
+        objectList.Add(inputObject);
+    }
+
+    public void RemoveObject(movableObject inputObject)
+    {
+        objectList.Remove(inputObject);
+    }
+
+
 
     public movableObject NearestObjectWithinGrabRadius(float grabRadius, Vector3 Position)
     {
@@ -40,6 +52,8 @@ public class ObjectHandler : MonoBehaviour
 
 public class movableObject  //: MonoBehaviour
 {
+    //ObjectHandler objectHandler;
+
     public Transform objectTransform;
     public Transform Hands;
 
@@ -49,17 +63,20 @@ public class movableObject  //: MonoBehaviour
 
     public bool taskCompleted;
 
-    public movableObject(GameObject Object, string interactionType)
+    public movableObject(GameObject Object, string interactionType)//, ObjectHandler objectHandler)
     {
         this.item = Object;
         this.objectTransform = item.transform;
         this.Hands = item.transform.GetChild(1);
         this.interactionType = interactionType;
         this.freeToGrab = true;
-    }
 
+        //this.objectHandler = objectHandler;
+    }
+    /*
     public void CompleteTask()
     {
         this.objectTransform.GetChild(2).gameObject.SetActive(true);
     }
+    */
 }
