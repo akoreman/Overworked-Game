@@ -20,9 +20,18 @@ public class AddMachineToHandler : MonoBehaviour
     void Awake()
     {
         gameState = GameObject.Find("Game State");
-       
-        movableObject outputObject = new movableObject(outputTransform.gameObject, outputType);
 
-        gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, outputObject);
+        if (outputTransform.gameObject.name != "Empty")
+        {
+            movableObject outputObject = new movableObject(outputTransform.gameObject, outputType);
+            gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, outputObject);
+
+        }
+        else
+        {
+            gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime);
+        }
+
+
     }
 }

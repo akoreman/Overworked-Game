@@ -18,6 +18,11 @@ public class MachineHandler : MonoBehaviour
         machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this, outputObject)); 
     }
 
+    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime)
+    {
+        machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this));
+    }
+
     public List<Machine> MachinesWithinGrabRadius(float grabRadius, Vector3 Position)
     {
         float Distance = 0;
@@ -50,12 +55,18 @@ public class MachineHandler : MonoBehaviour
         Destroy(machine.inputObject.gameObject);
         gameState.GetComponent<ObjectHandler>().RemoveObject(machine.inputObject);
 
-        Instantiate(machine.outputObject.gameObject);
+        //print(machine.outputObject == null);
 
-        machine.outputObject.gameObject.transform.position = machine.gameObject.transform.position + machine.localObjectPlacement;
-        machine.outputObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
-        machine.outputObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
-        machine.outputObject.gameObject.GetComponent<Collider>().enabled = false;
+        if (machine.outputObject != null)
+        {
+            //print("yay");
+            Instantiate(machine.outputObject.gameObject);
+
+            machine.outputObject.gameObject.transform.position = machine.gameObject.transform.position + machine.localObjectPlacement;
+            machine.outputObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
+            machine.outputObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
+            machine.outputObject.gameObject.GetComponent<Collider>().enabled = false;
+        }
     }
 }
 
@@ -83,6 +94,19 @@ public class Machine
         this.interactionTime = interactionTime;
         this.machineHandler = machineHandler;
         this.outputObject = outputObject;
+
+        machineFilled = false;
+    }
+
+    public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler)
+    {
+        this.gameObject = Object;
+
+        this.interactionType = interactionType;
+        this.localObjectPlacement = localObjectPlacement;
+        this.interactionTime = interactionTime;
+        this.machineHandler = machineHandler;
+        this.outputObject = null;
 
         machineFilled = false;
     }

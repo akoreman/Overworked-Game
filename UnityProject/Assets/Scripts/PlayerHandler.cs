@@ -77,8 +77,7 @@ public class PlayerHandler : MonoBehaviour
         // Pickup or drop the closest item (if within the drop radius).
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            print("yay");
-
+ 
             if (PickedUpObject == null)
             {
                 PickUpObject(2.5f);
@@ -126,8 +125,10 @@ public class PlayerHandler : MonoBehaviour
         velocity.x += Time.deltaTime * acceleration.x;
         velocity.z += Time.deltaTime * acceleration.y;
 
-        velocity.x = Mathf.Min(maxVel, velocity.x);
-        velocity.z = Mathf.Min(maxVel, velocity.z);
+        //velocity.x = Mathf.Min(maxVel, velocity.x);
+        //velocity.z = Mathf.Min(maxVel, velocity.z);
+
+        velocity = Vector3.ClampMagnitude(velocity, maxVel);
 
         //Update the velocity of the solidbody.
         body.velocity = velocity;
@@ -217,7 +218,6 @@ public class PlayerHandler : MonoBehaviour
 
     void FillMachine(float interactionRadius)
     {
-        print("yay");
 
         var nearestMachines = gameState.GetComponent<MachineHandler>().MachinesWithinGrabRadius(interactionRadius, player.transform.position);
 
