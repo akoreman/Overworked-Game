@@ -76,7 +76,7 @@ public class Machine
     public GameObject gameObject;
 
     public movableObject inputObject;
-    public movableObject outputObject;
+    public movableObject outputObject; 
 
     public bool machineFilled;
 

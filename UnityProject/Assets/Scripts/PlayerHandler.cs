@@ -173,23 +173,54 @@ public class PlayerHandler : MonoBehaviour
 
     void PickUpObject(float pickupRadius)
     {
-        var nearestObject = gameState.GetComponent<ObjectHandler>().NearestObjectWithinGrabRadius(pickupRadius, player.transform.position);
+        movableObject nearestObject = gameState.GetComponent<ObjectHandler>().NearestObjectWithinGrabRadius(pickupRadius, player.transform.position);
+
+        Dispenser nearestDispenser = gameState.GetComponent<DispenserHandler>().NearestDispenserWithinGrabRadius(pickupRadius, player.transform.position);
 
         
-        if (nearestObject != null)
+
+        //bool pickup;
+
+        if (nearestObject != null && nearestDispenser == null)
         {
             PickedUpObject = nearestObject;
+        }
+        else if (nearestObject == null && nearestDispenser != null)
+        {
+            PickedUpObject = nearestDispenser.DispenseObject();
+        }
+        else if (nearestObject != null && nearestDispenser != null)
+        {
+            print(nearestDispenser.gameObject.name);
 
+            
+
+            if ((nearestObject.gameObject.transform.position - player.position).magnitude < (nearestDispenser.gameObject.transform.position - player.position).magnitude)
+            {
+                PickedUpObject = nearestObject;
+            }
+            else
+            {
+                movableObject nearestDispenserObject = nearestDispenser.DispenseObject();
+
+                PickedUpObject = nearestDispenser.DispenseObject();
+            }
+        }
+
+        if (PickedUpObject != null)
+        { 
             PickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
             PickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
             PickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
 
+            PickedUpObject.gameObject.transform.position = player.position;
+
             PickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
-            PickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
-            PickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(1.5f, 0.5f, 0f);
-
-
             PickedUpObject.gameObject.transform.GetChild(0).localEulerAngles = new Vector3(0f, 0f, 0f);
+
+            PickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
+
+            PickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(1.5f, 0.5f, 0f);
         }
     }
 

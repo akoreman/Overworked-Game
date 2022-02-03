@@ -8,7 +8,6 @@ public class AddMachineToHandler : MonoBehaviour
 {
     GameObject gameState;
 
-
     public Vector3 placementPosition;
     public string interactionType;
     public string outputType;
