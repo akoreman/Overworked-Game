@@ -21,6 +21,13 @@ public class ObjectHandler : MonoBehaviour
         objectList.Remove(inputObject);
     }
 
+    public movableObject CreateAndRegisterObject(GameObject inputObject)
+    {
+        Instantiate(inputObject);
+
+        return objectList[objectList.Count - 1];
+    }
+
 
 
     public movableObject NearestObjectWithinGrabRadius(float grabRadius, Vector3 Position)

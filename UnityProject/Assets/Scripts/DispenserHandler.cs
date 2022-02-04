@@ -5,14 +5,19 @@ using UnityEngine;
 public class DispenserHandler : MonoBehaviour
 {
     public List<Dispenser> dispenserList = new List<Dispenser>();
-
+    GameObject gameState;
     /*
     public void RegisterDispenser(GameObjGameObject Object)
     {
         objectList.Add(new movableObject(Object, interactionType));//, this) );
     }
     */
-    public void RegisterDispenser(GameObject gameObject, movableObject outputObject)
+    void Awake()
+    {
+        gameState = GameObject.Find("Game State");
+    }
+
+    public void RegisterDispenser(GameObject gameObject, GameObject outputObject)
     {
         
 
@@ -59,8 +64,8 @@ public class DispenserHandler : MonoBehaviour
 
     public movableObject DispenseObject(Dispenser dispenser)
     {
-        Instantiate(dispenser.outputObject.gameObject);
-        return dispenser.outputObject;
+        //Instantiate(dispenser.outputObject.gameObject);
+        return gameState.GetComponent<ObjectHandler>().CreateAndRegisterObject(dispenser.outputObject);
     }
 }
 
@@ -69,9 +74,9 @@ public class Dispenser
     DispenserHandler dispenserHandler;
 
     public GameObject gameObject;
-    public movableObject outputObject;
+    public GameObject outputObject;
 
-    public Dispenser(GameObject gameObject, movableObject outputObject, DispenserHandler dispenserHandler)
+    public Dispenser(GameObject gameObject, GameObject outputObject, DispenserHandler dispenserHandler)
     {
         this.gameObject = gameObject;
         this.outputObject = outputObject;

@@ -10,19 +10,19 @@ public class AddMachineToHandler : MonoBehaviour
 
     public Vector3 placementPosition;
     public string interactionType;
-    public string outputType;
+    //public string outputType;
     public int interactionTime;
 
-    public Transform outputTransform = null;
+    public GameObject outputObject;
     //public GameObject Object;
 
     void Awake()
     {
         gameState = GameObject.Find("Game State");
 
-        if (outputTransform.gameObject.name != "Empty")
+        if (outputObject.name != "Empty")
         {
-            movableObject outputObject = new movableObject(outputTransform.gameObject, outputType);
+            //movableObject outputObject = new movableObject(outputTransform.gameObject, outputType);
             gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, outputObject);
 
         }

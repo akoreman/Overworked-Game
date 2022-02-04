@@ -14,7 +14,7 @@ public class AddObjectToHandler : MonoBehaviour
         gameState = GameObject.Find("Game State");
         Hands = this.gameObject.transform.GetChild(1);
 
-        this.gameObject.transform.GetChild(2).gameObject.SetActive(false);
+        //this.gameObject.transform.GetChild(2).gameObject.SetActive(false);
         Hands.gameObject.SetActive(false);
 
         gameState.GetComponent<ObjectHandler>().RegisterObject(this.gameObject, interactionType);

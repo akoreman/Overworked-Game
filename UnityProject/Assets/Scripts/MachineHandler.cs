@@ -13,7 +13,7 @@ public class MachineHandler : MonoBehaviour
         gameState = GameObject.Find("Game State");
     }
 
-    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime, movableObject outputObject)
+    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime, GameObject outputObject)
     {
         machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this, outputObject)); 
     }
@@ -33,12 +33,36 @@ public class MachineHandler : MonoBehaviour
         {
             Distance = (x.gameObject.transform.position - Position).magnitude;
 
-            if (Distance < grabRadius)
+            if (Distance < grabRadius && !x.machineFilled)
                 nearestMachines.Add(x);
         }
 
         if (nearestMachines.Count > 0)
             return nearestMachines;
+        else
+            return null;
+    }
+
+    public Machine NearestFullmachineWithinGrabRadius(float grabRadius, Vector3 Position)
+    {
+        float Distance = 0;
+        float minDistance = 100000;
+
+        Machine nearestMachine = null;
+
+        foreach (Machine x in machineList)
+        {
+            Distance = (x.gameObject.transform.position - Position).magnitude;
+
+            if (Distance < minDistance && x.machineFilled)
+            {
+                minDistance = Distance;
+                nearestMachine = x;
+            }
+        }
+
+        if (minDistance < grabRadius)
+            return nearestMachine;
         else
             return null;
     }
@@ -55,17 +79,19 @@ public class MachineHandler : MonoBehaviour
         Destroy(machine.inputObject.gameObject);
         gameState.GetComponent<ObjectHandler>().RemoveObject(machine.inputObject);
 
-        //print(machine.outputObject == null);
-
         if (machine.outputObject != null)
         {
             //print("yay");
-            Instantiate(machine.outputObject.gameObject);
+            //Instantiate(machine.outputObject.gameObject);
 
-            machine.outputObject.gameObject.transform.position = machine.gameObject.transform.position + machine.localObjectPlacement;
-            machine.outputObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
-            machine.outputObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
-            machine.outputObject.gameObject.GetComponent<Collider>().enabled = false;
+            machine.finishedObject = gameState.GetComponent<ObjectHandler>().CreateAndRegisterObject(machine.outputObject);
+
+            machine.finishedObject.gameObject.transform.position = machine.gameObject.transform.position + machine.localObjectPlacement;
+            machine.finishedObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
+            machine.finishedObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
+            machine.finishedObject.gameObject.GetComponent<Collider>().enabled = false;
+
+            machine.finishedObject.freeToGrab = false;
         }
     }
 }
@@ -76,7 +102,7 @@ public class Machine
     public GameObject gameObject;
 
     public movableObject inputObject;
-    public movableObject outputObject; 
+    public GameObject outputObject; 
 
     public bool machineFilled;
 
@@ -85,7 +111,9 @@ public class Machine
 
     public Vector3 localObjectPlacement;
 
-    public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, movableObject outputObject)
+    public movableObject finishedObject;
+
+    public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, GameObject outputObject)
     {
         this.gameObject = Object;
 
@@ -113,10 +141,10 @@ public class Machine
 
     public void PlaceObject(movableObject inputObject)
     {
-        inputObject.gameObject.transform.position = this.gameObject.transform.position + localObjectPlacement;
+        inputObject.gameObject.transform.position = gameObject.transform.position + localObjectPlacement;
 
         inputObject.gameObject.transform.GetChild(0).localPosition = new Vector3(0f, 0f, 0f);
-        inputObject.gameObject.transform.GetChild(2).localPosition = new Vector3(0f, 0f, 0f);
+        //inputObject.gameObject.transform.GetChild(2).localPosition = new Vector3(0f, 0f, 0f);
         inputObject.hands.gameObject.SetActive(false);
         inputObject.gameObject.transform.localEulerAngles = new Vector3(0f,0f,0f);
 
@@ -128,6 +156,12 @@ public class Machine
         machineHandler.StartRoutine(this);
     }
 
+    public movableObject EmptyMachine()
+    {
+        machineFilled = false;
+        finishedObject.freeToGrab = true;
 
+        return finishedObject;
+    }
 
 }

@@ -32,7 +32,7 @@ public class PlayerHandler : MonoBehaviour
     float angle;
     float tiltAngle;
 
-    movableObject PickedUpObject = null;
+    movableObject pickedUpObject = null;
 
     GameObject gameState;   
 
@@ -78,7 +78,7 @@ public class PlayerHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
  
-            if (PickedUpObject == null)
+            if (pickedUpObject == null)
             {
                 PickUpObject(2.5f);
                 UpdateArms();
@@ -93,7 +93,7 @@ public class PlayerHandler : MonoBehaviour
         // Throw the item if picked-up.
         if (Input.GetKeyDown("z"))
         {
-            if (PickedUpObject != null)
+            if (pickedUpObject != null)
             {
                 DropObject(10f);
                 UpdateArms();
@@ -102,7 +102,7 @@ public class PlayerHandler : MonoBehaviour
 
         if (Input.GetKeyDown("x"))
         {
-            if (PickedUpObject != null)
+            if (pickedUpObject != null)
             {
                 FillMachine(2.5f);
                 UpdateArms();
@@ -142,33 +142,35 @@ public class PlayerHandler : MonoBehaviour
         player.transform.localEulerAngles = currentAngle;
 
         // If item is picked up co-rotate the item with the player.
-        if (PickedUpObject != null)
+        if (pickedUpObject != null)
         {
-            PickedUpObject.gameObject.transform.position = player.position;
-            PickedUpObject.gameObject.transform.localEulerAngles = new Vector3(0f, currentAngle.y, 0f);
+            print(pickedUpObject.gameObject.name);
+
+            pickedUpObject.gameObject.transform.position = player.position;
+            pickedUpObject.gameObject.transform.localEulerAngles = new Vector3(0f, currentAngle.y, 0f);
         }
     }
 
     void DropObject(float speed = 0f)
     {
-        PickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = false;
-        PickedUpObject.gameObject.GetComponent<Collider>().enabled = true;
-        PickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = true;
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = false;
+        pickedUpObject.gameObject.GetComponent<Collider>().enabled = true;
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = true;
 
-        PickedUpObject.gameObject.GetComponent<Rigidbody>().velocity = player.GetComponent<Rigidbody>().velocity + (PickedUpObject.gameObject.transform.right + new Vector3(0f, .2f, 0f)) * speed;
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().velocity = player.GetComponent<Rigidbody>().velocity + (pickedUpObject.gameObject.transform.right + new Vector3(0f, .2f, 0f)) * speed;
 
-        PickedUpObject.gameObject.transform.position = PickedUpObject.gameObject.transform.GetChild(0).position;
-        PickedUpObject.gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+        pickedUpObject.gameObject.transform.position = pickedUpObject.gameObject.transform.GetChild(0).position;
+        //PickedUpObject.gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
 
-        PickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(0f, 0f, 0f);
-        PickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(0f, 0f, 0f);
-        PickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(0f, 0f, 0f);
-
-
-        PickedUpObject.gameObject.transform.GetChild(1).gameObject.SetActive(false);
+        pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(0f, 0f, 0f);
+        pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(0f, 0f, 0f);
+        //pickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(0f, 0f, 0f);
 
 
-        PickedUpObject = null;
+        pickedUpObject.gameObject.transform.GetChild(1).gameObject.SetActive(false);
+
+
+        pickedUpObject = null;
     }
 
     void PickUpObject(float pickupRadius)
@@ -177,64 +179,59 @@ public class PlayerHandler : MonoBehaviour
 
         Dispenser nearestDispenser = gameState.GetComponent<DispenserHandler>().NearestDispenserWithinGrabRadius(pickupRadius, player.transform.position);
 
-        
 
-        //bool pickup;
+        if (nearestObject == null && nearestDispenser == null)
+            return;
+
 
         if (nearestObject != null && nearestDispenser == null)
         {
-            PickedUpObject = nearestObject;
+            pickedUpObject = nearestObject;
         }
         else if (nearestObject == null && nearestDispenser != null)
         {
-            PickedUpObject = nearestDispenser.DispenseObject();
+            pickedUpObject = nearestDispenser.DispenseObject();
         }
         else if (nearestObject != null && nearestDispenser != null)
         {
             print(nearestDispenser.gameObject.name);
 
-            
-
             if ((nearestObject.gameObject.transform.position - player.position).magnitude < (nearestDispenser.gameObject.transform.position - player.position).magnitude)
             {
-                PickedUpObject = nearestObject;
+                pickedUpObject = nearestObject;
             }
             else
             {
-                movableObject nearestDispenserObject = nearestDispenser.DispenseObject();
-
-                PickedUpObject = nearestDispenser.DispenseObject();
+                pickedUpObject = nearestDispenser.DispenseObject();
             }
         }
 
-        if (PickedUpObject != null)
-        { 
-            PickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
-            PickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
-            PickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
+        pickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
 
-            PickedUpObject.gameObject.transform.position = player.position;
+        pickedUpObject.gameObject.transform.position = player.position + new Vector3(1.5f, 0.5f, 0f);
 
-            PickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
-            PickedUpObject.gameObject.transform.GetChild(0).localEulerAngles = new Vector3(0f, 0f, 0f);
+        pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
+        //PickedUpObject.gameObject.transform.GetChild(0).localEulerAngles = new Vector3(0f, 0f, 0f);
 
-            PickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
+        pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
 
-            PickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(1.5f, 0.5f, 0f);
-        }
+        //pickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(1.5f, 0.5f, 0f);
+        
     }
 
     void UpdateArms()
     {
-        if (PickedUpObject != null)
+        if (pickedUpObject != null)
         {
-            leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, PickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(PickedUpObject.gameObject.transform.GetChild(1).localScale, PickedUpObject.gameObject.transform.GetChild(1).GetChild(0).localPosition));
-            rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, PickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(PickedUpObject.gameObject.transform.GetChild(1).localScale, PickedUpObject.gameObject.transform.GetChild(1).GetChild(1).localPosition));
+            leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(pickedUpObject.gameObject.transform.GetChild(1).localScale, pickedUpObject.gameObject.transform.GetChild(1).GetChild(0).localPosition));
+            rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(pickedUpObject.gameObject.transform.GetChild(1).localScale, pickedUpObject.gameObject.transform.GetChild(1).GetChild(1).localPosition));
 
             leftArm.transform.GetChild(1).gameObject.SetActive(false);
             rightArm.transform.GetChild(1).gameObject.SetActive(false);
 
-            PickedUpObject.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+            pickedUpObject.gameObject.transform.GetChild(1).gameObject.SetActive(true);
         }
         else
         {
@@ -252,38 +249,55 @@ public class PlayerHandler : MonoBehaviour
 
         var nearestMachines = gameState.GetComponent<MachineHandler>().MachinesWithinGrabRadius(interactionRadius, player.transform.position);
 
+        if (nearestMachines == null)
+            return;
         
-        if (nearestMachines != null)
+ 
+        foreach (Machine x in nearestMachines)
         {
-            foreach (Machine x in nearestMachines)
+            if (pickedUpObject.interactionType == x.interactionType)
             {
-                if (PickedUpObject.interactionType == x.interactionType)
-                {
-                    PickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
-                    PickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
-                    PickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
-                    PickedUpObject.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
+                pickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
+                pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
+                pickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
+                pickedUpObject.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
 
-                    x.PlaceObject(PickedUpObject);
+                x.PlaceObject(pickedUpObject);
 
-                    PickedUpObject = null;
+                pickedUpObject = null;
 
-                    break;
-                }    
+                break;
+            }    
 
      
-            }
         }
+        
     }
 
     void EmptyMachine(float interactionRadius)
     {
-        var nearestMachine = gameState.GetComponent<MachineHandler>().MachinesWithinGrabRadius(interactionRadius, player.transform.position);
+        var nearestMachine = gameState.GetComponent<MachineHandler>().NearestFullmachineWithinGrabRadius(interactionRadius, player.transform.position);
 
-        if (nearestMachine != null)
+        if (nearestMachine == null)
         {
-
+            return;
         }
+
+        pickedUpObject = nearestMachine.EmptyMachine();
+
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
+        pickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
+
+        pickedUpObject.gameObject.transform.position = player.position + new Vector3(1.5f, 0.5f, 0f);
+
+        pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
+        //PickedUpObject.gameObject.transform.GetChild(0).localEulerAngles = new Vector3(0f, 0f, 0f);
+
+        pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
+
+        //pickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(1.5f, 0.5f, 0f);
+
     }
 
     float AngleFromUnitCirclePosition(float x, float y)
