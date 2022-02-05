@@ -8,7 +8,7 @@ public class PlayerHandler : MonoBehaviour
     Transform player;
 
     [SerializeField]
-    float accScaling = 1f;
+    float accelerationScaling = 1f;
 
     [SerializeField]
     float rotateSpeed = 10f;
@@ -17,7 +17,7 @@ public class PlayerHandler : MonoBehaviour
     float tiltSpeed = 10f;
 
     [SerializeField]
-    float maxVel = 10f;
+    float maxSpeed = 10f;
 
     Vector3 acceleration = new Vector3(0f,0f,0f);
     Vector2 angleVector = new Vector2(0f, 0f);
@@ -72,7 +72,7 @@ public class PlayerHandler : MonoBehaviour
             tiltAngle = 0f;
         }
 
-        acceleration *= accScaling;
+        acceleration *= accelerationScaling;
 
         // Pickup or drop the closest item (if within the drop radius).
         if (Input.GetKeyDown(KeyCode.LeftControl))
@@ -125,10 +125,7 @@ public class PlayerHandler : MonoBehaviour
         velocity.x += Time.deltaTime * acceleration.x;
         velocity.z += Time.deltaTime * acceleration.y;
 
-        //velocity.x = Mathf.Min(maxVel, velocity.x);
-        //velocity.z = Mathf.Min(maxVel, velocity.z);
-
-        velocity = Vector3.ClampMagnitude(velocity, maxVel);
+        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
 
         //Update the velocity of the solidbody.
         body.velocity = velocity;
@@ -160,12 +157,9 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject.gameObject.GetComponent<Rigidbody>().velocity = player.GetComponent<Rigidbody>().velocity + (pickedUpObject.gameObject.transform.right + new Vector3(0f, .2f, 0f)) * speed;
 
         pickedUpObject.gameObject.transform.position = pickedUpObject.gameObject.transform.GetChild(0).position;
-        //PickedUpObject.gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
 
         pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(0f, 0f, 0f);
         pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(0f, 0f, 0f);
-        //pickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(0f, 0f, 0f);
-
 
         pickedUpObject.gameObject.transform.GetChild(1).gameObject.SetActive(false);
 
@@ -194,8 +188,6 @@ public class PlayerHandler : MonoBehaviour
         }
         else if (nearestObject != null && nearestDispenser != null)
         {
-            print(nearestDispenser.gameObject.name);
-
             if ((nearestObject.gameObject.transform.position - player.position).magnitude < (nearestDispenser.gameObject.transform.position - player.position).magnitude)
             {
                 pickedUpObject = nearestObject;
@@ -213,11 +205,8 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject.gameObject.transform.position = player.position + new Vector3(1.5f, 0.5f, 0f);
 
         pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
-        //PickedUpObject.gameObject.transform.GetChild(0).localEulerAngles = new Vector3(0f, 0f, 0f);
 
         pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
-
-        //pickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(1.5f, 0.5f, 0f);
         
     }
 
@@ -292,12 +281,8 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject.gameObject.transform.position = player.position + new Vector3(1.5f, 0.5f, 0f);
 
         pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
-        //PickedUpObject.gameObject.transform.GetChild(0).localEulerAngles = new Vector3(0f, 0f, 0f);
 
         pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
-
-        //pickedUpObject.gameObject.transform.GetChild(2).localPosition = new Vector3(1.5f, 0.5f, 0f);
-
     }
 
     float AngleFromUnitCirclePosition(float x, float y)

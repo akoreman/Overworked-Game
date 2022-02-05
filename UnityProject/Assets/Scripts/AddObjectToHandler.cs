@@ -20,3 +20,8 @@ public class AddObjectToHandler : MonoBehaviour
         gameState.GetComponent<ObjectHandler>().RegisterObject(this.gameObject, interactionType);
     }
 }
+
+public class objectEditorWindow : MonoBehaviour
+{
+    public int yay;
+}

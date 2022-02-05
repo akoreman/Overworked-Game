@@ -13,15 +13,21 @@ public class MachineHandler : MonoBehaviour
         gameState = GameObject.Find("Game State");
     }
 
-    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime, GameObject outputObject)
+    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime, GameObject outputObject, bool destroyMachineOnCompletion)
     {
-        machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this, outputObject)); 
+        machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this, outputObject, destroyMachineOnCompletion)); 
     }
 
-    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime)
+    public void RegisterObject(GameObject Object, string interactionType, Vector3 placementPosition, int interactionTime, bool destroyMachineOnCompletion)
     {
-        machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this));
+        machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this, destroyMachineOnCompletion));
     }
+
+    public void RemoveObject(Machine inputMachine)
+    {
+        machineList.Remove(inputMachine);
+    }
+
 
     public List<Machine> MachinesWithinGrabRadius(float grabRadius, Vector3 Position)
     {
@@ -72,6 +78,13 @@ public class MachineHandler : MonoBehaviour
         StartCoroutine(StartMachineCoroutine(machine));
     }
 
+    public void DestroyMachine(Machine machine)
+    {
+        machine.finishedObject.freeToGrab = true;
+        Destroy(machine.gameObject);
+        RemoveObject(machine);
+    }
+
     IEnumerator StartMachineCoroutine(Machine machine)
     {
         yield return new WaitForSeconds(machine.interactionTime);
@@ -79,20 +92,26 @@ public class MachineHandler : MonoBehaviour
         Destroy(machine.inputObject.gameObject);
         gameState.GetComponent<ObjectHandler>().RemoveObject(machine.inputObject);
 
-        if (machine.outputObject != null)
+        if (machine.outputObject == null)
         {
-            //print("yay");
-            //Instantiate(machine.outputObject.gameObject);
-
-            machine.finishedObject = gameState.GetComponent<ObjectHandler>().CreateAndRegisterObject(machine.outputObject);
-
-            machine.finishedObject.gameObject.transform.position = machine.gameObject.transform.position + machine.localObjectPlacement;
-            machine.finishedObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
-            machine.finishedObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
-            machine.finishedObject.gameObject.GetComponent<Collider>().enabled = false;
-
-            machine.finishedObject.freeToGrab = false;
+            machine.machineFilled = false;
+            yield break;
         }
+
+        machine.finishedObject = gameState.GetComponent<ObjectHandler>().CreateAndRegisterObject(machine.outputObject);
+
+        machine.finishedObject.gameObject.transform.position = machine.gameObject.transform.position + machine.localObjectPlacement;
+        machine.finishedObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
+        machine.finishedObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
+        machine.finishedObject.gameObject.GetComponent<Collider>().enabled = false;
+
+        machine.finishedObject.freeToGrab = false;
+
+        if (!machine.destroyMachineOnCompletion)
+            yield break;
+
+        DestroyMachine(machine);
+        
     }
 }
 
@@ -113,7 +132,9 @@ public class Machine
 
     public movableObject finishedObject;
 
-    public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, GameObject outputObject)
+    public bool destroyMachineOnCompletion;
+
+    public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, GameObject outputObject, bool destroyMachineOnCompletion)
     {
         this.gameObject = Object;
 
@@ -122,11 +143,12 @@ public class Machine
         this.interactionTime = interactionTime;
         this.machineHandler = machineHandler;
         this.outputObject = outputObject;
+        this.destroyMachineOnCompletion = destroyMachineOnCompletion;
 
         machineFilled = false;
     }
 
-    public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler)
+    public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, bool destroyMachineOnCompletion)
     {
         this.gameObject = Object;
 
@@ -135,6 +157,7 @@ public class Machine
         this.interactionTime = interactionTime;
         this.machineHandler = machineHandler;
         this.outputObject = null;
+        this.destroyMachineOnCompletion = destroyMachineOnCompletion;
 
         machineFilled = false;
     }
@@ -162,6 +185,11 @@ public class Machine
         finishedObject.freeToGrab = true;
 
         return finishedObject;
+    }
+
+    public void DestroyMachine()
+    {
+        machineHandler.DestroyMachine(this);
     }
 
 }

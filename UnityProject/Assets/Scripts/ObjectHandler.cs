@@ -6,6 +6,8 @@ public class ObjectHandler : MonoBehaviour
 {
     public List<movableObject> objectList = new List<movableObject>();
 
+   
+
     public void RegisterObject(GameObject Object, string interactionType)
     {
         objectList.Add(new movableObject(Object, interactionType));//, this) );

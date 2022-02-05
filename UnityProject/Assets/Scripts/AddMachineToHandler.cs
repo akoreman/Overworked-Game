@@ -10,25 +10,27 @@ public class AddMachineToHandler : MonoBehaviour
 
     public Vector3 placementPosition;
     public string interactionType;
-    //public string outputType;
     public int interactionTime;
 
+    public bool hasOutput;
     public GameObject outputObject;
-    //public GameObject Object;
+
+    public bool destroyMachineOnCompletion;
+
 
     void Awake()
     {
         gameState = GameObject.Find("Game State");
 
-        if (outputObject.name != "Empty")
+        if (hasOutput)
         {
             //movableObject outputObject = new movableObject(outputTransform.gameObject, outputType);
-            gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, outputObject);
+            gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, outputObject, destroyMachineOnCompletion);
 
         }
         else
         {
-            gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime);
+            gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, destroyMachineOnCompletion);
         }
 
 
