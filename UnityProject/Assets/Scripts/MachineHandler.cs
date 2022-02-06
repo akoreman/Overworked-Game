@@ -52,6 +52,7 @@ public class MachineHandler : MonoBehaviour
     public Machine NearestFullmachineWithinGrabRadius(float grabRadius, Vector3 Position)
     {
         float Distance = 0;
+        // Set minDistance to large value.
         float minDistance = 100000;
 
         Machine nearestMachine = null;

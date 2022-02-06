@@ -170,13 +170,10 @@ public class PlayerHandler : MonoBehaviour
     void PickUpObject(float pickupRadius)
     {
         movableObject nearestObject = gameState.GetComponent<ObjectHandler>().NearestObjectWithinGrabRadius(pickupRadius, player.transform.position);
-
         Dispenser nearestDispenser = gameState.GetComponent<DispenserHandler>().NearestDispenserWithinGrabRadius(pickupRadius, player.transform.position);
-
 
         if (nearestObject == null && nearestDispenser == null)
             return;
-
 
         if (nearestObject != null && nearestDispenser == null)
         {
@@ -203,13 +200,20 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
 
         pickedUpObject.gameObject.transform.position = player.position + new Vector3(1.5f, 0.5f, 0f);
-
         pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
-
         pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
         
     }
+    /*
+    private object GetClosestObject(object... objects)
+    {
+        double minDistance =  ;
+        foreach (obj in objects)
+        {
 
+        }
+    }
+    */
     void UpdateArms()
     {
         if (pickedUpObject != null)
