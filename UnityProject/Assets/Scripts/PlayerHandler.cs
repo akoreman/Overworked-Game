@@ -77,7 +77,6 @@ public class PlayerHandler : MonoBehaviour
         // Pickup or drop the closest item (if within the drop radius).
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
- 
             if (pickedUpObject == null)
             {
                 PickUpObject(2.5f);
@@ -107,11 +106,13 @@ public class PlayerHandler : MonoBehaviour
                 FillMachine(2.5f);
                 UpdateArms();
             }
+            /*
             else
             {
                 EmptyMachine(2.5f);
                 UpdateArms();
             }
+            */
         }
 
     }
@@ -141,7 +142,7 @@ public class PlayerHandler : MonoBehaviour
         // If item is picked up co-rotate the item with the player.
         if (pickedUpObject != null)
         {
-            print(pickedUpObject.gameObject.name);
+            //print(pickedUpObject.gameObject.name);
 
             pickedUpObject.gameObject.transform.position = player.position;
             pickedUpObject.gameObject.transform.localEulerAngles = new Vector3(0f, currentAngle.y, 0f);
@@ -178,6 +179,12 @@ public class PlayerHandler : MonoBehaviour
         if (nearestObject != null && nearestDispenser == null)
         {
             pickedUpObject = nearestObject;
+
+            if (nearestObject.machine != null)
+            {
+                nearestObject.machine.EmptyMachine();
+                nearestObject.machine = null;
+            }
         }
         else if (nearestObject == null && nearestDispenser != null)
         {
@@ -188,6 +195,13 @@ public class PlayerHandler : MonoBehaviour
             if ((nearestObject.gameObject.transform.position - player.position).magnitude < (nearestDispenser.gameObject.transform.position - player.position).magnitude)
             {
                 pickedUpObject = nearestObject;
+
+                if (nearestObject.machine != null)
+                {
+                    nearestObject.machine.EmptyMachine();
+                    nearestObject.machine = null;
+                }
+
             }
             else
             {
@@ -267,6 +281,7 @@ public class PlayerHandler : MonoBehaviour
         
     }
 
+    /*
     void EmptyMachine(float interactionRadius)
     {
         var nearestMachine = gameState.GetComponent<MachineHandler>().NearestFullmachineWithinGrabRadius(interactionRadius, player.transform.position);
@@ -288,7 +303,7 @@ public class PlayerHandler : MonoBehaviour
 
         pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
     }
-
+    */
     float AngleFromUnitCirclePosition(float x, float y)
     {
         if (x > 0f && y > 0f)

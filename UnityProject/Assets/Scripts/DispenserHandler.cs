@@ -32,34 +32,24 @@ public class DispenserHandler : MonoBehaviour
 
         Dispenser nearestDispenser = null;
 
-        print("yaaay");
-
         foreach (Dispenser x in dispenserList)
         {
-            print("yaay");
-
             Distance = (x.gameObject.transform.position - Position).magnitude;
 
             print(Distance);
 
             if (Distance < minDistance)
             {
-                print("yay");
                 minDistance = Distance;
                 nearestDispenser = x;
             }
         }
 
         if (minDistance < grabRadius)
-        {
-            print("one");
             return nearestDispenser;
-        }
         else
-        {
-            print("two");
             return null;
-        }
+        
     }
 
     public movableObject DispenseObject(Dispenser dispenser)

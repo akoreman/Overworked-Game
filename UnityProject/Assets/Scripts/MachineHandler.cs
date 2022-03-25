@@ -106,13 +106,19 @@ public class MachineHandler : MonoBehaviour
         machine.finishedObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
         machine.finishedObject.gameObject.GetComponent<Collider>().enabled = false;
 
-        machine.finishedObject.freeToGrab = false;
+        //machine.finishedObject.freeToGrab = false;
+        machine.finishedObject.freeToGrab = true;
+        machine.finishedObject.machine = machine;
+
 
         if (!machine.destroyMachineOnCompletion)
             yield break;
 
+        machine.finishedObject.gameObject.GetComponent<Collider>().enabled = true;
+        machine.finishedObject.gameObject.GetComponent<Rigidbody>().freezeRotation = false;
+        machine.finishedObject.gameObject.GetComponent<Rigidbody>().useGravity = true;
+
         DestroyMachine(machine);
-        
     }
 }
 
@@ -176,16 +182,24 @@ public class Machine
 
         machineFilled = true;
         inputObject.freeToGrab = false;
+        inputObject.machine = this;
 
         machineHandler.StartRoutine(this);
     }
 
+    /*
     public movableObject EmptyMachine()
     {
         machineFilled = false;
         finishedObject.freeToGrab = true;
 
         return finishedObject;
+    }
+    */
+
+    public void EmptyMachine()
+    {
+        machineFilled = false;
     }
 
     public void DestroyMachine()

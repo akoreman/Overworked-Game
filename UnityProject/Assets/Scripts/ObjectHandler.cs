@@ -7,7 +7,6 @@ public class ObjectHandler : MonoBehaviour
     public List<movableObject> objectList = new List<movableObject>();
 
    
-
     public void RegisterObject(GameObject Object, string interactionType)
     {
         objectList.Add(new movableObject(Object, interactionType));//, this) );
@@ -46,6 +45,8 @@ public class ObjectHandler : MonoBehaviour
 
             if (Distance < minDistance && x.freeToGrab)
             {
+                print(x.gameObject.name);
+
                 minDistance = Distance;
                 nearestObject = x;
             }
@@ -68,12 +69,15 @@ public class movableObject
     public bool freeToGrab;
     public bool taskCompleted;
 
+    public Machine machine;
+
     public movableObject(GameObject gameObject, string interactionType)//, ObjectHandler objectHandler)
     {
         this.gameObject = gameObject;
         this.hands = gameObject.transform.GetChild(1).gameObject;
         this.interactionType = interactionType;
         this.freeToGrab = true;
+        this.machine = null;
     }
 
 }
