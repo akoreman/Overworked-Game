@@ -21,7 +21,3 @@ public class AddObjectToHandler : MonoBehaviour
     }
 }
 
-public class objectEditorWindow : MonoBehaviour
-{
-    public int yay;
-}

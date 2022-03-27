@@ -26,6 +26,7 @@ public class MachineHandler : MonoBehaviour
     public void RemoveObject(Machine inputMachine)
     {
         machineList.Remove(inputMachine);
+        print("machine removed");
     }
 
 
@@ -84,6 +85,8 @@ public class MachineHandler : MonoBehaviour
         machine.finishedObject.freeToGrab = true;
         Destroy(machine.gameObject);
         RemoveObject(machine);
+
+  
     }
 
     IEnumerator StartMachineCoroutine(Machine machine)
@@ -141,6 +144,7 @@ public class Machine
 
     public bool destroyMachineOnCompletion;
 
+
     public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, GameObject outputObject, bool destroyMachineOnCompletion)
     {
         this.gameObject = Object;
@@ -151,7 +155,7 @@ public class Machine
         this.machineHandler = machineHandler;
         this.outputObject = outputObject;
         this.destroyMachineOnCompletion = destroyMachineOnCompletion;
-
+ 
         machineFilled = false;
     }
 

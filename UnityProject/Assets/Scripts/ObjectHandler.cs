@@ -20,6 +20,7 @@ public class ObjectHandler : MonoBehaviour
     public void RemoveObject(movableObject inputObject)
     {
         objectList.Remove(inputObject);
+        print("remove object");
     }
 
     public movableObject CreateAndRegisterObject(GameObject inputObject)
@@ -41,12 +42,11 @@ public class ObjectHandler : MonoBehaviour
 
         foreach (movableObject x in objectList)
         {
+            print(x.gameObject.name);
             Distance = (x.gameObject.transform.position - Position).magnitude;
 
             if (Distance < minDistance && x.freeToGrab)
             {
-                print(x.gameObject.name);
-
                 minDistance = Distance;
                 nearestObject = x;
             }

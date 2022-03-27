@@ -36,7 +36,7 @@ public class DispenserHandler : MonoBehaviour
         {
             Distance = (x.gameObject.transform.position - Position).magnitude;
 
-            print(Distance);
+
 
             if (Distance < minDistance)
             {

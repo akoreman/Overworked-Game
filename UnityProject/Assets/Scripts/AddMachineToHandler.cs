@@ -15,6 +15,8 @@ public class AddMachineToHandler : MonoBehaviour
     public bool hasOutput;
     public GameObject outputObject;
 
+
+
     public bool destroyMachineOnCompletion;
 
 
