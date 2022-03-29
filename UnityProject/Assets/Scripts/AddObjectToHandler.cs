@@ -9,6 +9,10 @@ public class AddObjectToHandler : MonoBehaviour
 
     public string interactionType;
 
+    public bool isMachine;
+    public string machineInteractionType;
+    public GameObject outputObject;
+
     void Awake()
     {
         gameState = GameObject.Find("Game State");
@@ -17,7 +21,14 @@ public class AddObjectToHandler : MonoBehaviour
         //this.gameObject.transform.GetChild(2).gameObject.SetActive(false);
         Hands.gameObject.SetActive(false);
 
-        gameState.GetComponent<ObjectHandler>().RegisterObject(this.gameObject, interactionType);
+        movableObject movableobject = new movableObject(this.gameObject, interactionType);
+        Machine machine = new Machine(this.gameObject, machineInteractionType, gameState.GetComponent<MachineHandler>(),  movableobject, outputObject);
+
+        gameState.GetComponent<ObjectHandler>().RegisterObject(movableobject);
+        //gameState.GetComponent<ObjectHandler>().RegisterObject(this.gameObject, interactionType);
+
+        if (isMachine)
+            gameState.GetComponent<MachineHandler>().RegisterObject(machine);
     }
 }
 

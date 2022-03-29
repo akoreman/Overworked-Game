@@ -13025,7 +13025,7 @@ PrefabInstance:
       objectReference: {fileID: 801433461}
     - target: {fileID: 3963381280231236431, guid: ceb3f59d20287b2458183b62bbb128e8, type: 3}
       propertyPath: m_VersionIndex
-      value: 12
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3963381282191999840, guid: ceb3f59d20287b2458183b62bbb128e8, type: 3}
       propertyPath: m_Mesh
@@ -13037,10 +13037,14 @@ PrefabInstance:
       objectReference: {fileID: 1469933734}
     - target: {fileID: 3963381282191999842, guid: ceb3f59d20287b2458183b62bbb128e8, type: 3}
       propertyPath: m_VersionIndex
-      value: 12
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5125213395168921309, guid: ceb3f59d20287b2458183b62bbb128e8, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8551102674220979142, guid: ceb3f59d20287b2458183b62bbb128e8, type: 3}
+      propertyPath: isMachine
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

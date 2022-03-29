@@ -23,6 +23,11 @@ public class MachineHandler : MonoBehaviour
         machineList.Add(new Machine(Object, interactionType, placementPosition, interactionTime, this, destroyMachineOnCompletion));
     }
 
+    public void RegisterObject(Machine machine)
+    {
+        machineList.Add(machine);
+    }
+
     public void RemoveObject(Machine inputMachine)
     {
         machineList.Remove(inputMachine);
@@ -85,7 +90,7 @@ public class MachineHandler : MonoBehaviour
         machine.finishedObject.freeToGrab = true;
         Destroy(machine.gameObject);
         RemoveObject(machine);
-
+        gameState.GetComponent<ObjectHandler>().RemoveObject(machine.movableobject);
   
     }
 
@@ -144,6 +149,7 @@ public class Machine
 
     public bool destroyMachineOnCompletion;
 
+    public movableObject movableobject;
 
     public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, GameObject outputObject, bool destroyMachineOnCompletion)
     {
@@ -155,6 +161,7 @@ public class Machine
         this.machineHandler = machineHandler;
         this.outputObject = outputObject;
         this.destroyMachineOnCompletion = destroyMachineOnCompletion;
+        this.movableobject = null;
  
         machineFilled = false;
     }
@@ -169,6 +176,22 @@ public class Machine
         this.machineHandler = machineHandler;
         this.outputObject = null;
         this.destroyMachineOnCompletion = destroyMachineOnCompletion;
+        this.movableobject = null;
+
+        machineFilled = false;
+    }
+
+    public Machine(GameObject Object, string interactionType, MachineHandler machineHandler, movableObject movableobject, GameObject outputObject)
+    {
+        this.gameObject = Object;
+
+        this.interactionType = interactionType;
+        this.localObjectPlacement = new Vector3(0f,0f,0f);
+        this.interactionTime = 0;
+        this.machineHandler = machineHandler;
+        this.outputObject = outputObject;
+        this.destroyMachineOnCompletion = true;
+        this.movableobject = movableobject;
 
         machineFilled = false;
     }

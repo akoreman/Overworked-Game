@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 1917760886678441419}
   - component: {fileID: 1917760886678441414}
   - component: {fileID: 1917760886678441413}
-  - component: {fileID: 534074752594339445}
   m_Layer: 0
   m_Name: WaterTeaCup
   m_TagString: Untagged
@@ -133,6 +132,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionType: tea-water
+  isMachine: 1
+  machineInteractionType: tea-bag
+  outputObject: {fileID: 1917760886678441418, guid: 15c1bf577c6bd8e41a088b22f7c03e38, type: 3}
 --- !u!54 &1917760886678441414
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -162,24 +164,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 0.7, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &534074752594339445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917760886678441418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b26dcd483753aab4d9e5c567457a80eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  placementPosition: {x: 0, y: 0, z: 0}
-  interactionType: tea-bag
-  interactionTime: 0
-  hasOutput: 1
-  outputObject: {fileID: 1917760886678441418, guid: 15c1bf577c6bd8e41a088b22f7c03e38, type: 3}
-  destroyMachineOnCompletion: 1
 --- !u!1 &1917760886964101985
 GameObject:
   m_ObjectHideFlags: 0
