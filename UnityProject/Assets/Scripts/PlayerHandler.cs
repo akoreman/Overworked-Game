@@ -44,11 +44,18 @@ public class PlayerHandler : MonoBehaviour
         leftArm = player.transform.Find("arm0").gameObject;
         rightArm = player.transform.Find("arm1").gameObject;
 
-        leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).localPosition);
-        rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).localPosition);
+        //leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).localPosition);
+        //rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).localPosition);
 
-        leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.localPosition);
-        rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.localPosition);
+        leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).position);
+        rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).position);
+
+
+        //leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.localPosition);
+        //rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.localPosition);
+
+        leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.position);
+        rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.position);
     }
 
     // Update is called once per frame
@@ -60,7 +67,6 @@ public class PlayerHandler : MonoBehaviour
         // Normalize the input vector to make controls more uniform and scale accordingly.
         acceleration.Normalize();
         
-
         if (Mathf.Abs(acceleration.x) > 0.1f || Mathf.Abs(acceleration.y) > 0.1f)
         {
             angle = -1 * AngleFromUnitCirclePosition(acceleration.x, acceleration.y);
@@ -80,12 +86,12 @@ public class PlayerHandler : MonoBehaviour
             if (pickedUpObject == null)
             {
                 PickUpObject(2.5f);
-                UpdateArms();
+                //UpdateArms();
             }
             else
             {
                 DropObject();
-                UpdateArms();
+                //UpdateArms();
             }
         }
 
@@ -95,7 +101,7 @@ public class PlayerHandler : MonoBehaviour
             if (pickedUpObject != null)
             {
                 DropObject(10f);
-                UpdateArms();
+                //UpdateArms();
             }
         }
 
@@ -104,7 +110,7 @@ public class PlayerHandler : MonoBehaviour
             if (pickedUpObject != null)
             {
                 FillMachine(2.5f);
-                UpdateArms();
+                //UpdateArms();
             }
             /*
             else
@@ -114,6 +120,8 @@ public class PlayerHandler : MonoBehaviour
             }
             */
         }
+
+        UpdateArms();
 
     }
 
@@ -232,8 +240,15 @@ public class PlayerHandler : MonoBehaviour
     {
         if (pickedUpObject != null)
         {
-            leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(pickedUpObject.gameObject.transform.GetChild(1).localScale, pickedUpObject.gameObject.transform.GetChild(1).GetChild(0).localPosition));
-            rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(pickedUpObject.gameObject.transform.GetChild(1).localScale, pickedUpObject.gameObject.transform.GetChild(1).GetChild(1).localPosition));
+            leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).position);
+            rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).position);
+
+            leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).GetChild(0).position);
+            rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).GetChild(1).position);
+
+
+            //leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(pickedUpObject.gameObject.transform.GetChild(1).localScale, pickedUpObject.gameObject.transform.GetChild(1).GetChild(0).localPosition));
+            //rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(pickedUpObject.gameObject.transform.GetChild(1).localScale, pickedUpObject.gameObject.transform.GetChild(1).GetChild(1).localPosition));
 
             leftArm.transform.GetChild(1).gameObject.SetActive(false);
             rightArm.transform.GetChild(1).gameObject.SetActive(false);
@@ -242,8 +257,16 @@ public class PlayerHandler : MonoBehaviour
         }
         else
         {
-            leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.localPosition);
-            rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.localPosition);
+            //leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.localPosition);
+            //rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.localPosition);
+
+            leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).position);
+            rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).position);
+
+
+            leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.position);
+            rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.position);
+
 
             leftArm.transform.GetChild(1).gameObject.SetActive(true);
             rightArm.transform.GetChild(1).gameObject.SetActive(true);
