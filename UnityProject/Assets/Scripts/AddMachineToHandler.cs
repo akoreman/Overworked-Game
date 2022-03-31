@@ -12,8 +12,11 @@ public class AddMachineToHandler : MonoBehaviour
     public string interactionType;
     public int interactionTime;
 
-    public bool hasOutput;
-    public GameObject outputObject;
+    public bool hasOutput = false;
+    public GameObject outputObject = null;
+
+    public bool hasAnimation = false;
+    Animator animator;
 
 
 
@@ -23,17 +26,26 @@ public class AddMachineToHandler : MonoBehaviour
     void Awake()
     {
         gameState = GameObject.Find("Game State");
+        
+
+        Machine machine;
 
         if (hasOutput)
         {
-            //movableObject outputObject = new movableObject(outputTransform.gameObject, outputType);
-            gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, outputObject, destroyMachineOnCompletion);
-
+            machine = new Machine(this.gameObject, interactionType, placementPosition, interactionTime,  gameState.GetComponent<MachineHandler>(), outputObject, destroyMachineOnCompletion);
         }
         else
         {
-            gameState.GetComponent<MachineHandler>().RegisterObject(this.gameObject, interactionType, placementPosition, interactionTime, destroyMachineOnCompletion);
+            machine = new Machine(this.gameObject, interactionType, placementPosition, interactionTime,  gameState.GetComponent<MachineHandler>(), destroyMachineOnCompletion);
         }
+
+        if (hasAnimation)
+        {
+            animator = this.gameObject.GetComponent<Animator>();
+            machine.SetAnimator(animator);
+        }
+
+        gameState.GetComponent<MachineHandler>().RegisterObject(machine);
 
 
     }

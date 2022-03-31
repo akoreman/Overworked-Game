@@ -151,6 +151,8 @@ public class Machine
 
     public movableObject movableobject;
 
+    public Animator animator;
+
     public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, GameObject outputObject, bool destroyMachineOnCompletion)
     {
         this.gameObject = Object;
@@ -179,6 +181,11 @@ public class Machine
         this.movableobject = null;
 
         machineFilled = false;
+    }
+
+    public void SetAnimator(Animator animator)
+    {
+        this.animator = animator;
     }
 
     public Machine(GameObject Object, string interactionType, MachineHandler machineHandler, movableObject movableobject, GameObject outputObject)

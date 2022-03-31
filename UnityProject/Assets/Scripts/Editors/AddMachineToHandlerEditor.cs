@@ -13,6 +13,9 @@ public class AddMachineToHandlerEditor : Editor
     SerializedProperty outputObject;
     SerializedProperty hasOutput;
     SerializedProperty destroyMachineOnCompletion;
+    SerializedProperty hasAnimation;
+    SerializedProperty animation;
+
 
     void OnEnable()
     {
@@ -22,6 +25,9 @@ public class AddMachineToHandlerEditor : Editor
 
         hasOutput = serializedObject.FindProperty("hasOutput");
         outputObject = serializedObject.FindProperty("outputObject");
+
+        hasAnimation = serializedObject.FindProperty("hasAnimation");
+        animation = serializedObject.FindProperty("animation");
 
         destroyMachineOnCompletion = serializedObject.FindProperty("destroyMachineOnCompletion");
     }
@@ -40,6 +46,10 @@ public class AddMachineToHandlerEditor : Editor
         {
             EditorGUILayout.PropertyField(outputObject);
         }
+
+        EditorGUILayout.PropertyField(hasAnimation);
+
+
 
         EditorGUILayout.PropertyField(destroyMachineOnCompletion);
 
