@@ -16,6 +16,7 @@ public class AddMachineToHandler : MonoBehaviour
     public GameObject outputObject = null;
 
     public bool hasAnimation = false;
+    public int animationLayer;
     Animator animator;
 
 
@@ -42,7 +43,7 @@ public class AddMachineToHandler : MonoBehaviour
         if (hasAnimation)
         {
             animator = this.gameObject.GetComponent<Animator>();
-            machine.SetAnimator(animator);
+            machine.SetAnimator(animator, animationLayer);
         }
 
         gameState.GetComponent<MachineHandler>().RegisterObject(machine);

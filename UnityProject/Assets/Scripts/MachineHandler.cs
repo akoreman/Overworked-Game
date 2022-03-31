@@ -118,6 +118,10 @@ public class MachineHandler : MonoBehaviour
         machine.finishedObject.freeToGrab = true;
         machine.finishedObject.machine = machine;
 
+        if (machine.animator != null)
+        {
+            machine.animator.Play(machine.interactionType + "-finish", machine.animationLayer);
+        }
 
         if (!machine.destroyMachineOnCompletion)
             yield break;
@@ -152,6 +156,7 @@ public class Machine
     public movableObject movableobject;
 
     public Animator animator;
+    public int animationLayer;
 
     public Machine(GameObject Object, string interactionType, Vector3 localObjectPlacement, int interactionTime, MachineHandler machineHandler, GameObject outputObject, bool destroyMachineOnCompletion)
     {
@@ -164,7 +169,8 @@ public class Machine
         this.outputObject = outputObject;
         this.destroyMachineOnCompletion = destroyMachineOnCompletion;
         this.movableobject = null;
- 
+        this.animator = null;
+
         machineFilled = false;
     }
 
@@ -179,13 +185,15 @@ public class Machine
         this.outputObject = null;
         this.destroyMachineOnCompletion = destroyMachineOnCompletion;
         this.movableobject = null;
+        this.animator = null;
 
         machineFilled = false;
     }
 
-    public void SetAnimator(Animator animator)
+    public void SetAnimator(Animator animator, int layer)
     {
         this.animator = animator;
+        this.animationLayer = layer;
     }
 
     public Machine(GameObject Object, string interactionType, MachineHandler machineHandler, movableObject movableobject, GameObject outputObject)
@@ -199,6 +207,7 @@ public class Machine
         this.outputObject = outputObject;
         this.destroyMachineOnCompletion = true;
         this.movableobject = movableobject;
+        this.animator = null;
 
         machineFilled = false;
     }
@@ -217,6 +226,11 @@ public class Machine
         machineFilled = true;
         inputObject.freeToGrab = false;
         inputObject.machine = this;
+
+        if (animator != null)
+        {
+            animator.Play(interactionType + "-start", animationLayer);
+        }
 
         machineHandler.StartRoutine(this);
     }
