@@ -44,15 +44,8 @@ public class PlayerHandler : MonoBehaviour
         leftArm = player.transform.Find("arm0").gameObject;
         rightArm = player.transform.Find("arm1").gameObject;
 
-        //leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).localPosition);
-        //rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).localPosition);
-
         leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).position);
         rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).position);
-
-
-        //leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.localPosition);
-        //rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.localPosition);
 
         leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.position);
         rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.position);
@@ -86,12 +79,10 @@ public class PlayerHandler : MonoBehaviour
             if (pickedUpObject == null)
             {
                 PickUpObject(2.5f);
-                //UpdateArms();
             }
             else
             {
                 DropObject();
-                //UpdateArms();
             }
         }
 
@@ -101,7 +92,6 @@ public class PlayerHandler : MonoBehaviour
             if (pickedUpObject != null)
             {
                 DropObject(10f);
-                //UpdateArms();
             }
         }
 
@@ -110,15 +100,7 @@ public class PlayerHandler : MonoBehaviour
             if (pickedUpObject != null)
             {
                 FillMachine(2.5f);
-                //UpdateArms();
             }
-            /*
-            else
-            {
-                EmptyMachine(2.5f);
-                UpdateArms();
-            }
-            */
         }
 
         UpdateArms();
@@ -150,8 +132,6 @@ public class PlayerHandler : MonoBehaviour
         // If item is picked up co-rotate the item with the player.
         if (pickedUpObject != null)
         {
-            //print(pickedUpObject.gameObject.name);
-
             pickedUpObject.gameObject.transform.position = player.position;
             pickedUpObject.gameObject.transform.localEulerAngles = new Vector3(0f, currentAngle.y, 0f);
         }
@@ -226,16 +206,7 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
         
     }
-    /*
-    private object GetClosestObject(object... objects)
-    {
-        double minDistance =  ;
-        foreach (obj in objects)
-        {
 
-        }
-    }
-    */
     void UpdateArms()
     {
         if (pickedUpObject != null)
@@ -246,10 +217,6 @@ public class PlayerHandler : MonoBehaviour
             leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).GetChild(0).position);
             rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).GetChild(1).position);
 
-
-            //leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(pickedUpObject.gameObject.transform.GetChild(1).localScale, pickedUpObject.gameObject.transform.GetChild(1).GetChild(0).localPosition));
-            //rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, pickedUpObject.gameObject.transform.GetChild(1).localPosition + Vector3.Scale(pickedUpObject.gameObject.transform.GetChild(1).localScale, pickedUpObject.gameObject.transform.GetChild(1).GetChild(1).localPosition));
-
             leftArm.transform.GetChild(1).gameObject.SetActive(false);
             rightArm.transform.GetChild(1).gameObject.SetActive(false);
 
@@ -257,9 +224,6 @@ public class PlayerHandler : MonoBehaviour
         }
         else
         {
-            //leftArm.GetComponentInChildren<LineRenderer>().SetPosition(1, leftArm.transform.Find("Sphere").transform.localPosition);
-            //rightArm.GetComponentInChildren<LineRenderer>().SetPosition(1, rightArm.transform.Find("Sphere").transform.localPosition);
-
             leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).position);
             rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).position);
 
@@ -304,29 +268,7 @@ public class PlayerHandler : MonoBehaviour
         
     }
 
-    /*
-    void EmptyMachine(float interactionRadius)
-    {
-        var nearestMachine = gameState.GetComponent<MachineHandler>().NearestFullmachineWithinGrabRadius(interactionRadius, player.transform.position);
 
-        if (nearestMachine == null)
-        {
-            return;
-        }
-
-        pickedUpObject = nearestMachine.EmptyMachine();
-
-        pickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
-        pickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
-        pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
-
-        pickedUpObject.gameObject.transform.position = player.position + new Vector3(1.5f, 0.5f, 0f);
-
-        pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
-
-        pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
-    }
-    */
     float AngleFromUnitCirclePosition(float x, float y)
     {
         if (x > 0f && y > 0f)

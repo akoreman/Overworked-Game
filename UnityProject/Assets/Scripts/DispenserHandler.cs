@@ -6,12 +6,7 @@ public class DispenserHandler : MonoBehaviour
 {
     public List<Dispenser> dispenserList = new List<Dispenser>();
     GameObject gameState;
-    /*
-    public void RegisterDispenser(GameObjGameObject Object)
-    {
-        objectList.Add(new movableObject(Object, interactionType));//, this) );
-    }
-    */
+
     void Awake()
     {
         gameState = GameObject.Find("Game State");
@@ -19,8 +14,6 @@ public class DispenserHandler : MonoBehaviour
 
     public void RegisterDispenser(GameObject gameObject, GameObject outputObject)
     {
-        
-
         dispenserList.Add(new Dispenser(gameObject, outputObject, this));
     }
 
@@ -28,7 +21,6 @@ public class DispenserHandler : MonoBehaviour
     {
         float Distance = 0;
         float minDistance = 100000;
-        //bool objectPresent = false;
 
         Dispenser nearestDispenser = null;
 
@@ -52,7 +44,6 @@ public class DispenserHandler : MonoBehaviour
 
     public movableObject DispenseObject(Dispenser dispenser)
     {
-        //Instantiate(dispenser.outputObject.gameObject);
         return gameState.GetComponent<ObjectHandler>().CreateAndRegisterObject(dispenser.outputObject);
     }
 }

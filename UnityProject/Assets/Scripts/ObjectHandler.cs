@@ -9,7 +9,7 @@ public class ObjectHandler : MonoBehaviour
    
     public void RegisterObject(GameObject Object, string interactionType)
     {
-        objectList.Add(new movableObject(Object, interactionType));//, this) );
+        objectList.Add(new movableObject(Object, interactionType));
     }
 
     public void RegisterObject(movableObject inputObject)
@@ -36,13 +36,11 @@ public class ObjectHandler : MonoBehaviour
     {
         float Distance = 0;
         float minDistance = 100000;
-        //bool objectPresent = false;
 
         movableObject nearestObject = null;
 
         foreach (movableObject x in objectList)
         {
-            print(x.gameObject.name);
             Distance = (x.gameObject.transform.position - Position).magnitude;
 
             if (Distance < minDistance && x.freeToGrab)

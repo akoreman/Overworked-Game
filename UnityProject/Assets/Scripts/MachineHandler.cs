@@ -82,7 +82,7 @@ public class MachineHandler : MonoBehaviour
 
     public void StartRoutine(Machine machine)
     {
-        StartCoroutine(StartMachineCoroutine(machine));
+        StartCoroutine(MachineCoroutine(machine));
     }
 
     public void DestroyMachine(Machine machine)
@@ -94,12 +94,17 @@ public class MachineHandler : MonoBehaviour
   
     }
 
-    IEnumerator StartMachineCoroutine(Machine machine)
+    IEnumerator MachineCoroutine(Machine machine)
     {
         yield return new WaitForSeconds(machine.interactionTime);
 
         Destroy(machine.inputObject.gameObject);
         gameState.GetComponent<ObjectHandler>().RemoveObject(machine.inputObject);
+
+        if (machine.animator != null)
+        {
+            machine.animator.Play(machine.interactionType + "-finish", machine.animationLayer);
+        }
 
         if (machine.outputObject == null)
         {
@@ -114,14 +119,8 @@ public class MachineHandler : MonoBehaviour
         machine.finishedObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
         machine.finishedObject.gameObject.GetComponent<Collider>().enabled = false;
 
-        //machine.finishedObject.freeToGrab = false;
         machine.finishedObject.freeToGrab = true;
         machine.finishedObject.machine = machine;
-
-        if (machine.animator != null)
-        {
-            machine.animator.Play(machine.interactionType + "-finish", machine.animationLayer);
-        }
 
         if (!machine.destroyMachineOnCompletion)
             yield break;
@@ -190,12 +189,6 @@ public class Machine
         machineFilled = false;
     }
 
-    public void SetAnimator(Animator animator, int layer)
-    {
-        this.animator = animator;
-        this.animationLayer = layer;
-    }
-
     public Machine(GameObject Object, string interactionType, MachineHandler machineHandler, movableObject movableobject, GameObject outputObject)
     {
         this.gameObject = Object;
@@ -210,6 +203,12 @@ public class Machine
         this.animator = null;
 
         machineFilled = false;
+    }
+
+    public void SetAnimator(Animator animator, int layer)
+    {
+        this.animator = animator;
+        this.animationLayer = layer;
     }
 
     public void PlaceObject(movableObject inputObject)
@@ -234,16 +233,6 @@ public class Machine
 
         machineHandler.StartRoutine(this);
     }
-
-    /*
-    public movableObject EmptyMachine()
-    {
-        machineFilled = false;
-        finishedObject.freeToGrab = true;
-
-        return finishedObject;
-    }
-    */
 
     public void EmptyMachine()
     {
