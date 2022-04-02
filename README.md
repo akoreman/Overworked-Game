@@ -9,3 +9,5 @@ Playable very early prototype on https://xyalice.itch.io/overworked
 
 <img src="https://raw.github.com/akoreman/Overworked-game/main/images/WIP1.png" width="400">  
 
+<img src="https://raw.github.com/akoreman/Overworked-game/main/images/WIP2.png" width="400">  
+
