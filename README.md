@@ -1,9 +1,9 @@
-# Small game prototype: Overworked
-Very early and rough WIP. Working on a small, overcooked style, game poking a bit of fun at research student life. Current prototype includes moving around, picking up/dropping physics items, throwing them, and one task (getting your supervisor coffee).
+# Game prototype: Overworked
+Early WIP. Prototype for a, overcooked style, game poking a bit of fun at research student life. Current prototype includes moving around overcooked style, picking up/dropping/throwing items and interacting with items and the enviroment.
 
 Models made using Blender.
 
-Playable very early prototype on https://xyalice.itch.io/overworked
+Playable early prototype on https://xyalice.itch.io/overworked
 
 # Screenshots
 
