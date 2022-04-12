@@ -109,6 +109,10 @@ public class MachineHandler : MonoBehaviour
         if (machine.outputObject == null)
         {
             machine.machineFilled = false;
+            
+            if (machine.destroyMachineOnCompletion)
+                DestroyMachine(machine);
+
             yield break;
         }
 
