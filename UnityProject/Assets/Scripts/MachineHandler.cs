@@ -87,7 +87,7 @@ public class MachineHandler : MonoBehaviour
 
     public void DestroyMachine(Machine machine)
     {
-        machine.finishedObject.freeToGrab = true;
+        //if (machine.finishedObject != null) { machine.finishedObject.freeToGrab = true; }
         Destroy(machine.gameObject);
         RemoveObject(machine);
         gameState.GetComponent<ObjectHandler>().RemoveObject(machine.movableobject);
@@ -109,9 +109,9 @@ public class MachineHandler : MonoBehaviour
         if (machine.outputObject == null)
         {
             machine.machineFilled = false;
-            
-            if (machine.destroyMachineOnCompletion)
-                DestroyMachine(machine);
+
+            if (machine.destroyMachineOnCompletion) { DestroyMachine(machine); }
+                
 
             yield break;
         }
