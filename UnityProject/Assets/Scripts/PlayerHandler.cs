@@ -82,7 +82,12 @@ public class PlayerHandler : MonoBehaviour
             }
             else
             {
-                DropObject();
+                var nearsestSurface = gameState.GetComponent<SurfaceHandler>().NearestObjectWithinGrabRadius(5f, player.transform.position);
+
+                if (nearsestSurface == null)
+                    DropObject();
+                else 
+                    print("yay");
             }
         }
 
