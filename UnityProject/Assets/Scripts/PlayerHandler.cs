@@ -82,12 +82,12 @@ public class PlayerHandler : MonoBehaviour
             }
             else
             {
-                var nearsestSurface = gameState.GetComponent<SurfaceHandler>().NearestObjectWithinGrabRadius(5f, player.transform.position);
+                var nearsestSurface = gameState.GetComponent<SurfaceHandler>().NearestObjectWithinGrabRadius(2.5f, player.transform.position);
 
                 if (nearsestSurface == null)
                     DropObject();
                 else 
-                    print("yay");
+                    PlaceOnSurface(nearsestSurface);
             }
         }
 
@@ -161,6 +161,25 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject = null;
     }
 
+    void PlaceOnSurface(Surface surface)
+    {
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = false;
+        pickedUpObject.gameObject.GetComponent<Collider>().enabled = true;
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = true;
+
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f,0f,0f);
+
+        pickedUpObject.gameObject.transform.position = surface.gameObject.transform.position + surface.localPosition;
+
+        pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(0f, 0f, 0f);
+        pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(0f, 0f, 0f);
+
+        pickedUpObject.gameObject.transform.GetChild(1).gameObject.SetActive(false);
+        pickedUpObject.onSurface = true;
+
+        pickedUpObject = null;
+    }
+
     void PickUpObject(float pickupRadius)
     {
         movableObject nearestObject = gameState.GetComponent<ObjectHandler>().NearestObjectWithinGrabRadius(pickupRadius, player.transform.position);
@@ -205,6 +224,8 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
         pickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
         pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
+
+        pickedUpObject.onSurface = false;
 
         pickedUpObject.gameObject.transform.position = player.position + new Vector3(1.5f, 0.5f, 0f);
         pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
@@ -302,6 +323,5 @@ public class PlayerHandler : MonoBehaviour
 
         return 0f;
     }
-
 
 }

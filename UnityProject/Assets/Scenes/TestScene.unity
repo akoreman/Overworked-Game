@@ -11453,7 +11453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9604515ee14c341ab9fcd9ba4ebd4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localPosition: {x: 0, y: 0, z: 0}
+  localPosition: {x: 0, y: 1, z: 0}
 --- !u!65 &1508427222
 BoxCollider:
   m_ObjectHideFlags: 0

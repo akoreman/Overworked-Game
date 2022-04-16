@@ -28,7 +28,7 @@ public class SurfaceHandler : MonoBehaviour
         foreach (Surface x in objectList)
         {
             Distance = (x.gameObject.transform.position - Position).magnitude;
-
+   
             if (Distance < minDistance && x.surfaceEmpty)
             {
                 minDistance = Distance;
@@ -55,7 +55,7 @@ public class Surface
     public Surface(GameObject gameObject, Vector3 localPosition)
     {
         this.gameObject = gameObject;
-        this.surfaceEmpty = false;
+        this.surfaceEmpty = true;
         this.localPosition = localPosition;
     }
 

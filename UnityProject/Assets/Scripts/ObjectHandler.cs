@@ -66,6 +66,7 @@ public class movableObject
     public string interactionType;
     public bool freeToGrab;
     public bool taskCompleted;
+    public bool onSurface;
 
     public Machine machine;
 
@@ -76,6 +77,7 @@ public class movableObject
         this.interactionType = interactionType;
         this.freeToGrab = true;
         this.machine = null;
+        this.onSurface = false;
     }
 
 }
