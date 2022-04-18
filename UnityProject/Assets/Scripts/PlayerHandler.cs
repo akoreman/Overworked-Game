@@ -29,10 +29,12 @@ public class PlayerHandler : MonoBehaviour
     GameObject leftArm;
     GameObject rightArm;
 
+    GameObject throwIndicator;
+
     float angle;
     float tiltAngle;
 
-    movableObject pickedUpObject = null;
+    MovableObject pickedUpObject = null;
 
     GameObject gameState;   
 
@@ -43,6 +45,8 @@ public class PlayerHandler : MonoBehaviour
 
         leftArm = player.transform.Find("arm0").gameObject;
         rightArm = player.transform.Find("arm1").gameObject;
+
+        throwIndicator = player.transform.Find("Throw Indicator").gameObject;
 
         leftArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(1).position);
         rightArm.GetComponentInChildren<LineRenderer>().SetPosition(0, player.transform.GetChild(2).position);
@@ -96,7 +100,16 @@ public class PlayerHandler : MonoBehaviour
         {
             if (pickedUpObject != null)
             {
+                DisplayThrowIndicator();
+            }
+        }
+
+        if (Input.GetKeyUp("z"))
+        {
+            if (pickedUpObject != null)
+            {
                 DropObject(10f);
+                HideThrowIndicator();
             }
         }
 
@@ -164,8 +177,8 @@ public class PlayerHandler : MonoBehaviour
     void PlaceOnSurface(Surface surface)
     {
         pickedUpObject.gameObject.GetComponent<Rigidbody>().freezeRotation = false;
-        pickedUpObject.gameObject.GetComponent<Collider>().enabled = true;
-        pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = true;
+        pickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
+        pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
 
         pickedUpObject.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f,0f,0f);
 
@@ -175,14 +188,28 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(0f, 0f, 0f);
 
         pickedUpObject.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        pickedUpObject.onSurface = true;
+        pickedUpObject.surface = surface;
+
+        surface.surfaceEmpty = false;
+
+        //print("test");
+
+        //print(pickedUpObject.machine.gameObject.name);
+
+        /*
+        if (pickedUpObject.machine != null)
+        {
+            print("yay");
+            pickedUpObject.machine.machineFilled = false; 
+        }
+        */
 
         pickedUpObject = null;
     }
 
     void PickUpObject(float pickupRadius)
     {
-        movableObject nearestObject = gameState.GetComponent<ObjectHandler>().NearestObjectWithinGrabRadius(pickupRadius, player.transform.position);
+        MovableObject nearestObject = gameState.GetComponent<ObjectHandler>().NearestObjectWithinGrabRadius(pickupRadius, player.transform.position);
         Dispenser nearestDispenser = gameState.GetComponent<DispenserHandler>().NearestDispenserWithinGrabRadius(pickupRadius, player.transform.position);
 
         if (nearestObject == null && nearestDispenser == null)
@@ -213,7 +240,6 @@ public class PlayerHandler : MonoBehaviour
                     nearestObject.machine.EmptyMachine();
                     nearestObject.machine = null;
                 }
-
             }
             else
             {
@@ -225,12 +251,16 @@ public class PlayerHandler : MonoBehaviour
         pickedUpObject.gameObject.GetComponent<Collider>().enabled = false;
         pickedUpObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
 
-        pickedUpObject.onSurface = false;
+        if (pickedUpObject.surface != null)
+        {
+            pickedUpObject.surface.surfaceEmpty = true;
+            pickedUpObject.surface = null;
+        }
+        //if (pickedUpObject.machine != null) {pickedUpObject.machine.machineFilled = true; }
 
         pickedUpObject.gameObject.transform.position = player.position + new Vector3(1.5f, 0.5f, 0f);
         pickedUpObject.gameObject.transform.GetChild(0).localPosition = new Vector3(1.5f, 0.5f, 0f);
-        pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);
-        
+        pickedUpObject.gameObject.transform.GetChild(1).localPosition = new Vector3(1.5f, 0.5f, 0f);      
     }
 
     void UpdateArms()
@@ -294,6 +324,20 @@ public class PlayerHandler : MonoBehaviour
         
     }
 
+    void DisplayThrowIndicator()
+    {
+        throwIndicator.SetActive(true);
+    }
+
+    void HideThrowIndicator()
+    {
+        throwIndicator.SetActive(false);
+    }
+
+    float CalculateThrowDistance(float speed, Vector3 angle)
+    {
+        return 0.0f;
+    }
 
     float AngleFromUnitCirclePosition(float x, float y)
     {

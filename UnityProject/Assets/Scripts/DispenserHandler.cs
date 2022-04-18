@@ -42,7 +42,7 @@ public class DispenserHandler : MonoBehaviour
         
     }
 
-    public movableObject DispenseObject(Dispenser dispenser)
+    public MovableObject DispenseObject(Dispenser dispenser)
     {
         return gameState.GetComponent<ObjectHandler>().CreateAndRegisterObject(dispenser.outputObject);
     }
@@ -62,7 +62,7 @@ public class Dispenser
         this.dispenserHandler = dispenserHandler;
     }
 
-    public movableObject DispenseObject()
+    public MovableObject DispenseObject()
     {
         return dispenserHandler.DispenseObject(this);
     }

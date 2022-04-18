@@ -142,7 +142,7 @@ public class Machine
     MachineHandler machineHandler;
     public GameObject gameObject;
 
-    public movableObject inputObject;
+    public MovableObject inputObject;
     public GameObject outputObject; 
 
     public bool machineFilled;
@@ -152,11 +152,11 @@ public class Machine
 
     public Vector3 localObjectPlacement;
 
-    public movableObject finishedObject;
+    public MovableObject finishedObject;
 
     public bool destroyMachineOnCompletion;
 
-    public movableObject movableobject;
+    public MovableObject movableobject;
 
     public Animator animator;
     public int animationLayer;
@@ -193,7 +193,7 @@ public class Machine
         machineFilled = false;
     }
 
-    public Machine(GameObject Object, string interactionType, MachineHandler machineHandler, movableObject movableobject, GameObject outputObject)
+    public Machine(GameObject Object, string interactionType, MachineHandler machineHandler, MovableObject movableobject, GameObject outputObject)
     {
         this.gameObject = Object;
 
@@ -215,7 +215,7 @@ public class Machine
         this.animationLayer = layer;
     }
 
-    public void PlaceObject(movableObject inputObject)
+    public void PlaceObject(MovableObject inputObject)
     {
         inputObject.gameObject.transform.position = gameObject.transform.position + localObjectPlacement;
 

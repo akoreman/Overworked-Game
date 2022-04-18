@@ -20,13 +20,21 @@ public class AddObjectToHandler : MonoBehaviour
 
         Hands.gameObject.SetActive(false);
 
-        movableObject movableobject = new movableObject(this.gameObject, interactionType);
-        Machine machine = new Machine(this.gameObject, machineInteractionType, gameState.GetComponent<MachineHandler>(),  movableobject, outputObject);
-
-        gameState.GetComponent<ObjectHandler>().RegisterObject(movableobject);
+        MovableObject movableObject = new MovableObject(this.gameObject, interactionType);
 
         if (isMachine)
+        {
+            Machine machine = new Machine(this.gameObject, machineInteractionType, gameState.GetComponent<MachineHandler>(),  movableObject, outputObject);
+            //machine.machineFilled = true;
             gameState.GetComponent<MachineHandler>().RegisterObject(machine);
+
+            //movableobject.machine = machine;
+            //movableObject.selfMachine = true;
+            //print("machine mov added");
+            //print(movableobject.machine.gameObject.name);
+        }
+
+        gameState.GetComponent<ObjectHandler>().RegisterObject(movableObject);
     }
 }
 

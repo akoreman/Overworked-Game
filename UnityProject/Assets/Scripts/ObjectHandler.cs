@@ -4,26 +4,25 @@ using UnityEngine;
 
 public class ObjectHandler : MonoBehaviour
 {
-    public List<movableObject> objectList = new List<movableObject>();
+    public List<MovableObject> objectList = new List<MovableObject>();
 
    
-    public void RegisterObject(GameObject Object, string interactionType)
+    public void RegisterObject(GameObject inputObject, string interactionType)
     {
-        objectList.Add(new movableObject(Object, interactionType));
+        objectList.Add(new MovableObject(inputObject, interactionType));
     }
 
-    public void RegisterObject(movableObject inputObject)
+    public void RegisterObject(MovableObject inputObject)
     {
         objectList.Add(inputObject);
     }
 
-    public void RemoveObject(movableObject inputObject)
+    public void RemoveObject(MovableObject inputObject)
     {
         objectList.Remove(inputObject);
-        print("remove object");
     }
 
-    public movableObject CreateAndRegisterObject(GameObject inputObject)
+    public MovableObject CreateAndRegisterObject(GameObject inputObject)
     {
         Instantiate(inputObject);
 
@@ -31,15 +30,15 @@ public class ObjectHandler : MonoBehaviour
     }
 
 
-
-    public movableObject NearestObjectWithinGrabRadius(float grabRadius, Vector3 Position)
+   
+    public MovableObject NearestObjectWithinGrabRadius(float grabRadius, Vector3 Position)
     {
         float Distance = 0;
         float minDistance = 100000;
 
-        movableObject nearestObject = null;
+        MovableObject nearestObject = null;
 
-        foreach (movableObject x in objectList)
+        foreach (MovableObject x in objectList)
         {
             Distance = (x.gameObject.transform.position - Position).magnitude;
 
@@ -58,7 +57,9 @@ public class ObjectHandler : MonoBehaviour
 
 }
 
-public class movableObject 
+ /// TO DO ///
+ // rename to MovableObject
+public class MovableObject 
 {
     public GameObject hands;
     public GameObject gameObject;
@@ -66,18 +67,20 @@ public class movableObject
     public string interactionType;
     public bool freeToGrab;
     public bool taskCompleted;
-    public bool onSurface;
+    public Surface surface;
 
     public Machine machine;
 
-    public movableObject(GameObject gameObject, string interactionType)//, ObjectHandler objectHandler)
+
+
+    public MovableObject(GameObject gameObject, string interactionType)//, ObjectHandler objectHandler)
     {
         this.gameObject = gameObject;
         this.hands = gameObject.transform.GetChild(1).gameObject;
         this.interactionType = interactionType;
         this.freeToGrab = true;
         this.machine = null;
-        this.onSurface = false;
+        this.surface = null;
     }
 
 }
