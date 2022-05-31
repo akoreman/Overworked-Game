@@ -3,7 +3,7 @@ Early WIP. Prototype for a, overcooked style, game poking a bit of fun at resear
 
 Models made using Blender.
 
-Playable early prototype on https://xyalice.itch.io/overworked
+Playable prototype on https://xyalice.itch.io/overworked
 
 # Screenshots
 
